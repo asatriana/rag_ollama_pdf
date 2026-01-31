@@ -9,6 +9,16 @@ def render_message(role: str, content: str):
     tpl = user_template if role == "user" else bot_template
     st.markdown(tpl.replace("{{MSG}}", content), unsafe_allow_html=True)
 
+def render_typing():
+    st.markdown(
+        """
+        <div class="tm-row bot">
+          <div class="tm-avatar bot">⚖️</div>
+          <div class="tm-bubble bot"><i>Analyzing document…</i></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 def format_sources_with_snippet(docs, max_items=8):
     seen = set()
@@ -92,7 +102,7 @@ def main():
 
         col1, col2 = st.columns([1, 1])
         with col1:
-            process = st.button("⬆️ Upload & Process", use_container_width=True)
+            process = st.button("⬆️ Process", use_container_width=True)
         with col2:
             clear = st.button("🧹 Reset", use_container_width=True)
 
@@ -226,6 +236,8 @@ def main():
             st.rerun()
 
         # Call router
+        # tampilkan typing indicator
+        render_typing()
         with st.spinner("Menganalisis dokumen..."):
             answer, src_docs = route_question(
                 st.session_state.vectorstore,

@@ -1,8 +1,9 @@
 # htmlTemplates.py
-# UI templates for Streamlit: CSS + header + chat bubbles
+# UI templates for Streamlit: CSS + header + chat bubbles (Legal Assistant style)
 
 css = """
 <style>
+/* ---------- Theme ---------- */
 :root{
   --bg: #f3f5f7;
   --card: #ffffff;
@@ -13,7 +14,7 @@ css = """
 
   --brand1:#0ea5a7;   /* teal */
   --brand2:#22c55e;   /* green */
-  --user:#16a34a;     /* user bubble */
+  --user:#22c55e;     /* user bubble */
   --bot:#ffffff;
   --botBorder:#e6eef2;
 }
@@ -23,21 +24,23 @@ header[data-testid="stHeader"]{display:none;}
 footer{visibility:hidden;}
 #MainMenu{visibility:hidden;}
 
-/* App background */
+/* App background (dotted wallpaper like screenshot) */
 .stApp{
   background:
     radial-gradient(circle at 1px 1px, rgba(15,23,42,0.06) 1px, transparent 0) 0 0/22px 22px,
     linear-gradient(var(--bg), var(--bg));
 }
 
-/* Center container */
+/* Main container: make it wider so header spans to the right */
 .main .block-container{
-  max-width: 1200px;
-  padding-top: 0.5rem;
-  padding-bottom: 1.4rem;
+  max-width: 100% !important;     /* FULL width main area */
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+  padding-top: 0.5rem !important; /* header lebih naik */
+  padding-bottom: 1.2rem;
 }
 
-/* Sidebar look */
+/* Sidebar as white panel */
 section[data-testid="stSidebar"]{
   background: var(--card) !important;
   border-right: 1px solid var(--border);
@@ -46,17 +49,37 @@ section[data-testid="stSidebar"] .block-container{
   padding-top: 1rem;
 }
 
-/* Header gradient */
-.main .block-container{
-  padding-top: 0.5rem !important;  /* sebelumnya ~1rem */
+/* ---------- Unified Buttons ---------- */
+/* Primary: gradient (Upload & Process) */
+/* ---------- Sidebar action buttons (Upload & Reset) ---------- */
+section[data-testid="stSidebar"] .stButton > button{
+  font-size: 13px !important;      /* perkecil font */
+  height: 40px !important;         /* sedikit lebih ramping */
+  padding: 0 14px !important;
+  letter-spacing: 0.2px;
 }
 
-.tm-header{
-  margin-top: 0 !important;
-  margin-bottom: 10px !important;
+/* Icon di dalam button lebih proporsional */
+section[data-testid="stSidebar"] .stButton > button span{
+  font-size: 13px !important;
 }
 
+/* Primary (Upload & Process) tetap tegas tapi tidak terlalu besar */
+section[data-testid="stSidebar"] button[kind="primary"]{
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+/* Secondary (Reset) */
+section[data-testid="stSidebar"] button[kind="secondary"]{
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+
+/* ---------- Header (Gradient) ---------- */
 .tm-header{
+  width: 100%;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -65,38 +88,70 @@ section[data-testid="stSidebar"] .block-container{
   border-radius: 18px;
   background: linear-gradient(90deg, var(--brand1), var(--brand2));
   box-shadow: var(--shadow);
-  margin-bottom: 14px;
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
 }
+
 .tm-header .title{
   display:flex;
   align-items:center;
   gap: 12px;
   color: white;
 }
+
 .tm-header .badge{
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
   background: rgba(255,255,255,0.18);
   display:flex;
   align-items:center;
   justify-content:center;
   font-size: 18px;
 }
+
 .tm-header h1{
   font-size: 20px;
   line-height: 1.2;
   margin: 0;
-  font-weight: 800;
+  font-weight: 900;
 }
 .tm-header .subtitle{
   margin-top: 2px;
   font-size: 12px;
   opacity: 0.92;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* Sidebar cards */
+/* Right slot inside header (for Clear Chat button) */
+.tm-header-right{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  min-width: 180px;
+}
+
+/* Clear Chat button styling when rendered inside .tm-header-right */
+.tm-header-right .stButton > button{
+  height: 38px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  font-weight: 900 !important;
+  background: rgba(15,23,42,0.92) !important;
+  color: white !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18) !important;
+}
+.tm-header-right .stButton > button:hover{
+  filter: brightness(1.05);
+}
+
+/* Make st.columns in header align nicely */
+div[data-testid="stHorizontalBlock"]{
+  gap: 12px;
+}
+
+/* ---------- Sidebar (Brand + Cards) ---------- */
 .sb-brand{
   display:flex;
   align-items:center;
@@ -120,6 +175,7 @@ section[data-testid="stSidebar"] .block-container{
   color: var(--text);
   font-size: 18px;
 }
+
 .sb-card{
   background: var(--card);
   border: 1px solid var(--border);
@@ -168,7 +224,7 @@ section[data-testid="stSidebar"] .block-container{
   background: rgba(34,197,94,0.85);
 }
 
-/* Chat area */
+/* ---------- Chat Area ---------- */
 .tm-chat-wrap{
   background: rgba(255,255,255,0.65);
   border: 1px solid rgba(229,231,235,0.8);
@@ -187,17 +243,22 @@ section[data-testid="stSidebar"] .block-container{
 .tm-row.user{ justify-content:flex-end; }
 .tm-row.bot{ justify-content:flex-start; }
 
-/* Avatars */
+/* Avatar - no external images */
 .tm-avatar{
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  overflow:hidden;
   border: 1px solid rgba(15,23,42,0.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 18px;
+  font-weight: 900;
   background: white;
-  flex: 0 0 32px;
+  flex: 0 0 34px;
 }
-.tm-avatar img{ width:100%; height:100%; object-fit:cover; }
+.tm-avatar.bot{ background: rgba(14,165,167,0.16); }
+.tm-avatar.user{ background: rgba(34,197,94,0.16); }
 
 /* Bubbles */
 .tm-bubble{
@@ -205,10 +266,10 @@ section[data-testid="stSidebar"] .block-container{
   padding: 12px 14px;
   border-radius: 16px;
   font-size: 13.5px;
-  line-height: 1.45;
+  line-height: 1.55;
   box-shadow: 0 8px 18px rgba(15,23,42,0.07);
   border: 1px solid transparent;
-  white-space: pre-wrap;
+  white-space: pre-line;
 }
 .tm-bubble.user{
   background: var(--user);
@@ -239,12 +300,12 @@ section[data-testid="stSidebar"] .block-container{
   border: 1px solid rgba(15,23,42,0.10);
   background: rgba(255,255,255,0.85);
   cursor:pointer;
-  font-weight: 700;
+  font-weight: 900;
   color: #0f172a;
 }
 .tm-chip:hover{ background: white; }
 
-/* Streamlit chat input style */
+/* Streamlit chat input - rounded bar */
 div[data-testid="stChatInput"] textarea{
   border-radius: 999px !important;
   padding: 14px 16px !important;
@@ -254,28 +315,10 @@ div[data-testid="stChatInput"] textarea{
 div[data-testid="stChatInput"] button{
   border-radius: 999px !important;
 }
-
-/* ---------- Button unification ---------- */
-button[kind="primary"],
-button.st-emotion-cache-1xw8zd0 {
-  background: linear-gradient(90deg, var(--brand1), var(--brand2)) !important;
-  color: white !important;
-  border-radius: 14px !important;
-  height: 42px !important;
-  font-weight: 800 !important;
-  border: none !important;
-}
-
-button[kind="secondary"]{
-  background: #0f172a !important;
-  color: white !important;
-  border-radius: 14px !important;
-  height: 42px !important;
-  font-weight: 700 !important;
-}
 </style>
 """
 
+# Header now supports a right-side slot for Clear Chat button
 header_html = """
 <div class="tm-header">
   <div class="title">
@@ -285,12 +328,16 @@ header_html = """
       <div class="subtitle">RAG multi-dokumen: pasal, kewajiban, sanksi, ringkasan</div>
     </div>
   </div>
+  <div class="tm-header-right">
+    
+  </div>
 </div>
 """
 
+# Chat message templates (emoji avatar, no external images)
 bot_template = """
 <div class="tm-row bot">
-  <div class="tm-avatar"><img src="https://static.thenounproject.com/png/481524-200.png" /></div>
+  <div class="tm-avatar bot">⚖️</div>
   <div class="tm-bubble bot">{{MSG}}</div>
 </div>
 """
@@ -298,6 +345,6 @@ bot_template = """
 user_template = """
 <div class="tm-row user">
   <div class="tm-bubble user">{{MSG}}</div>
-  <div class="tm-avatar"><img src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" /></div>
+  <div class="tm-avatar user">👤</div>
 </div>
 """
